@@ -13,6 +13,12 @@ import { Button } from "@/components/ui/button";
 export default function DashboardPage() {
   const { user, isLoading: userLoading } = useCurrentUser();
   const { folders, isLoading: foldersLoading } = useUserFolders();
+  // folders may be typed as (T | null)[] due to Convex generic inference not
+  // propagating the backend null-filter. This local predicate definitively
+  // narrows the array so TypeScript knows every element below is non-null.
+  const validFolders = folders.filter(
+    (folder): folder is NonNullable<typeof folder> => folder !== null
+  );
   const [createOpen, setCreateOpen] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
 
@@ -33,9 +39,9 @@ export default function DashboardPage() {
             : `${greeting()}, ${user?.name?.split(" ")[0] ?? "there"}`}
         </h1>
         <p className="text-midnight/50 text-sm">
-          {folders.length === 0
+          {validFolders.length === 0
             ? "Create your first folder to get started."
-            : `You have access to ${folders.length} folder${folders.length !== 1 ? "s" : ""}.`}
+            : `You have access to ${validFolders.length} folder${validFolders.length !== 1 ? "s" : ""}.`}
         </p>
       </div>
 
@@ -73,7 +79,7 @@ export default function DashboardPage() {
               />
             ))}
           </div>
-        ) : folders.length === 0 ? (
+        ) : validFolders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center bg-surface-2 rounded-2xl">
             <div className="w-12 h-12 bg-active rounded-xl flex items-center justify-center mb-4">
               <Plus className="w-5 h-5 text-midnight/40" />
@@ -97,7 +103,7 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {folders.map((folder) => (
+            {validFolders.map((folder) => (
               <FolderCard
                 key={folder._id}
                 folder={{
