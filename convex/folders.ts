@@ -2,19 +2,6 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { nanoid } from "nanoid";
 
-async function getAuthedUser(ctx: { auth: { getUserIdentity: () => Promise<{ subject: string } | null> }; db: { query: (table: string) => { withIndex: (index: string, fn: (q: { eq: (field: string, val: string) => unknown }) => unknown) => { first: () => Promise<{ _id: string; [key: string]: unknown } | null> } } } }) {
-  const identity = await ctx.auth.getUserIdentity();
-  if (!identity) throw new Error("Not authenticated");
-
-  const user = await ctx.db
-    .query("users")
-    .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
-    .first();
-
-  if (!user) throw new Error("User not found");
-  return user;
-}
-
 export const createFolder = mutation({
   args: {
     name: v.string(),
@@ -123,10 +110,10 @@ export const getUserFolders = query({
       })
     );
 
-    // Type predicate filter: tells TypeScript that after this call, every element
-    // is definitely non-null. filter(Boolean) works at runtime but doesn't narrow
-    // the TypeScript type — this explicit predicate does both.
-    return folders.filter((f): f is NonNullable<typeof f> => f !== null);
+    // flatMap skips nulls (orphaned memberships) and narrows the type in one step.
+    // Using flatMap instead of filter because TypeScript's ternary narrowing is
+    // more reliable here than type predicates through Convex's generic layers.
+    return folders.flatMap((f) => (f !== null ? [f] : []));
   },
 });
 
