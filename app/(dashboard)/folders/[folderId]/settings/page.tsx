@@ -384,6 +384,7 @@ export default function FolderSettingsPage() {
   }
 
   async function handleDeleteFolder() {
+    if (!folder) return;
     const confirmed = window.confirm(
       `Are you sure you want to delete "${folder.name}"? This cannot be undone. All deals, pipeline stages, schema, and members will be permanently removed.`
     );

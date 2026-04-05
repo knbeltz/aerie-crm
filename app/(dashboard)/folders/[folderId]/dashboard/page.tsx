@@ -90,7 +90,7 @@ export default function FolderDashboardPage() {
           ) : (
             <ResponsiveContainer width="100%" height={192}>
               <BarChart
-                data={stats!.stageBreakdown}
+                data={stats?.stageBreakdown ?? []}
                 margin={{ top: 4, right: 4, bottom: 4, left: -20 }}
               >
                 <XAxis
@@ -119,10 +119,10 @@ export default function FolderDashboardPage() {
                     fontSize: 12,
                     padding: "6px 12px",
                   }}
-                  formatter={(value: number) => [value, "Deals"]}
+                  formatter={(value) => [value, "Deals"]}
                 />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={40}>
-                  {stats!.stageBreakdown.map((entry, index) => (
+                  {(stats?.stageBreakdown ?? []).map((entry, index) => (
                     <Cell key={index} fill={entry.color} />
                   ))}
                 </Bar>

@@ -123,7 +123,10 @@ export const getUserFolders = query({
       })
     );
 
-    return folders.filter(Boolean);
+    // Type predicate filter: tells TypeScript that after this call, every element
+    // is definitely non-null. filter(Boolean) works at runtime but doesn't narrow
+    // the TypeScript type — this explicit predicate does both.
+    return folders.filter((f): f is NonNullable<typeof f> => f !== null);
   },
 });
 

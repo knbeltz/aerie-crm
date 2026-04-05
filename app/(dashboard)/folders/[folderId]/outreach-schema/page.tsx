@@ -312,7 +312,7 @@ export default function OutreachSchemaPage() {
                       entry={{
                         _id: entry._id,
                         data: entry.data as Record<string, unknown>,
-                        createdByName: entry.createdByName as string,
+                        createdByName: entry.createdByName,
                         updatedAt: entry.updatedAt,
                       }}
                       fields={fields}

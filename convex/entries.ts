@@ -26,7 +26,15 @@ export const checkDuplicate = query({
       return false;
     });
 
-    return duplicates;
+    return await Promise.all(
+      duplicates.map(async (entry) => {
+        const creator = await ctx.db.get(entry.createdBy);
+        return {
+          ...entry,
+          createdByName: creator?.name ?? "Unknown",
+        };
+      })
+    );
   },
 });
 
@@ -265,12 +273,26 @@ export const searchEntries = query({
 
     const lowerSearch = args.searchText.toLowerCase();
 
-    return entries.filter((entry) => {
+    const matched = entries.filter((entry) => {
       const data = entry.data as Record<string, unknown>;
       return Object.values(data).some((val) => {
         if (val === null || val === undefined) return false;
         return String(val).toLowerCase().includes(lowerSearch);
       });
     });
+
+    // Enrich with creator info — same shape as getTableEntries so consumers
+    // don't need to handle two different entry shapes.
+    return await Promise.all(
+      matched.map(async (entry) => {
+        const creator = await ctx.db.get(entry.createdBy);
+        const lastEditor = await ctx.db.get(entry.lastEditedBy);
+        return {
+          ...entry,
+          createdByName: creator?.name ?? "Unknown",
+          lastEditedByName: lastEditor?.name ?? "Unknown",
+        };
+      })
+    );
   },
 });

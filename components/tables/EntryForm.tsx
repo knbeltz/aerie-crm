@@ -90,7 +90,7 @@ export function EntryForm({
 
     // Check duplicates on create
     if (!entryId && duplicateCheck && duplicateCheck.length > 0) {
-      setDuplicates(duplicateCheck as typeof duplicates);
+      setDuplicates(duplicateCheck);
       setShowDuplicateWarning(true);
       setPendingSubmit(true);
       return;

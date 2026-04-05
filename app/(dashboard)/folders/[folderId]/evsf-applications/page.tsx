@@ -475,23 +475,21 @@ export default function EVSFApplicationsPage() {
     api.entries.searchEntries,
     tableId && search.trim() ? { tableId, searchText: search } : "skip"
   );
-  const entries = (search.trim()
-    ? (searchResults ?? [])
-    : (allEntries ?? [])) as Entry[];
+  const entries = search.trim() ? (searchResults ?? []) : (allEntries ?? []);
 
   // ─── Pipeline status map ─────────────────────────────────────────────────────
   const entryDealMap = useMemo(() => {
     const stageMap = new Map(
-      (stages ?? []).map((s) => [s._id as string, s])
+      (stages ?? []).map((s) => [s._id, s])
     );
     const map = new Map<string, PipelineStatus>();
     for (const deal of deals ?? []) {
-      if ((deal as any).sourceEntryId) {
-        const stage = stageMap.get((deal as any).stageId as string);
+      if (deal.sourceEntryId) {
+        const stage = stageMap.get(deal.stageId);
         if (stage) {
-          map.set((deal as any).sourceEntryId as string, {
+          map.set(deal.sourceEntryId, {
             stageName: stage.name,
-            stageColor: (stage.color as string | undefined) ?? "#6366f1",
+            stageColor: stage.color ?? "#6366f1",
           });
         }
       }
@@ -795,7 +793,7 @@ export default function EVSFApplicationsPage() {
                       entry={entry}
                       fields={fields as Field[]}
                       pipelineStatus={
-                        entryDealMap.get(entry._id as string) ?? null
+                        entryDealMap.get(entry._id) ?? null
                       }
                       canEdit={canEdit}
                       onEdit={() => setEditEntryId(entry._id)}

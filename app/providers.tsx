@@ -8,7 +8,7 @@ function ConvexClerkProvider({ children }: { children: React.ReactNode }) {
   return (
     <ConvexProviderWithClerk
       client={convex}
-      useAuth={useAuth as Parameters<typeof ConvexProviderWithClerk>[0]["useAuth"]}
+      useAuth={useAuth as unknown as Parameters<typeof ConvexProviderWithClerk>[0]["useAuth"]}
     >
       {children}
     </ConvexProviderWithClerk>
