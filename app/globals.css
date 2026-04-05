@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 224 100% 4%;
+    --card: 0 0% 96%;
+    --card-foreground: 224 100% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 100% 4%;
+    --primary: 224 100% 4%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 224 100% 4%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 224 10% 40%;
+    --accent: 0 0% 93%;
+    --accent-foreground: 224 100% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89%;
+    --input: 0 0% 91%;
+    --ring: 336 100% 36%;
+    --radius: 0.625rem;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #FAF9F9;
+    color: #000626;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Focus rings use crimson */
+  *:focus-visible {
+    outline: 2px solid #B80046;
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar styles */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F4F3F3;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #E3E2E2;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B80046;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: rgba(184, 0, 70, 0.15);
+    color: #000626;
+  }
+}
+
+@layer components {
+  .aerie-input {
+    @apply w-full bg-surface-2 px-3 py-2 text-sm text-midnight placeholder:text-midnight/40 rounded-lg transition-all duration-150;
+    border-bottom: 2px solid transparent;
+    outline: none;
+  }
+
+  .aerie-input:focus {
+    border-bottom-color: #B80046;
+    background-color: #E3E2E2;
+  }
+
+  .aerie-card {
+    @apply bg-surface-2 rounded-xl p-5;
+  }
+
+  .aerie-sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-midnight/70 transition-all duration-150 hover:text-midnight hover:bg-active;
+  }
+
+  .aerie-sidebar-link.active {
+    @apply text-midnight bg-active;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-manrope {
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+}
